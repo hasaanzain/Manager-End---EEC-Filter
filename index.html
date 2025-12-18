@@ -324,7 +324,7 @@
                     `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${githubPath}`,
                     {
                         headers: {
-                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Authorization': `Bearer ${GITHUB_TOKEN}`,
                             'Accept': 'application/vnd.github.v3+json'
                         }
                     }
