@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEC Table Support Schedule (Manager End)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #CC333D;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 12px 16px;
+            background-color: #f5f5f5;
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background-color: #efefef;
+            border-color: #999;
+        }
+
+        .file-input-label.has-file {
+            background-color: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #CC333D;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #CC333D;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background-color: #CC333D;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #aa2530;
+        }
+
+        button:active {
+            background-color: #8a1f27;
+        }
+
+        .secondary-btn {
+            background-color: #999;
+        }
+
+        .secondary-btn:hover {
+            background-color: #777;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            display: block;
+        }
+
+        .message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+        }
+
+        .message.info {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #CC333D;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EEC Table Support Schedule (Manager End)</h1>
+        
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="csvFile">Upload CSV File</label>
+                <div class="file-input-wrapper">
+                    <label for="csvFile" class="file-input-label" id="fileLabel">
+                        Choose CSV file or drag and drop
+                    </label>
+                    <input type="file" id="csvFile" accept=".csv" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" />
+            </div>
+
+            <div class="form-group hidden">
+                <label for="token">GitHub Token (required for upload)</label>
+                <input type="text" id="token" placeholder="Paste your GitHub personal access token" />
+                <small style="color: #999; display: block; margin-top: 5px;">
+                    <a href="https://github.com/settings/tokens" target="_blank" style="color: #CC333D;">Generate token here</a> with 'repo' scope. You can delete it after upload.
+                </small>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="primary-btn">Submit</button>
+                <button type="reset" class="secondary-btn">Clear</button>
+            </div>
+        </form>
+
+        <div class="message" id="message"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Uploading to GitHub...</p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const csvFile = document.getElementById('csvFile');
+        const fileLabel = document.getElementById('fileLabel');
+        const passwordInput = document.getElementById('password');
+        const message = document.getElementById('message');
+        const loading = document.getElementById('loading');
+
+        const CORRECT_PASSWORD = 'tyler2025';
+        const GITHUB_TOKEN = 'YOUR_TOKEN_HERE';
+        const GITHUB_USERNAME = 'hasaanzain';
+        const GITHUB_REPO = 'Eataly-Team-Schedule-Filtering-Tool';
+        const GITHUB_BRANCH = 'main';
+        const GITHUB_PATH = 'data';
+
+        // File input handling
+        csvFile.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileLabel.textContent = this.files[0].name;
+                fileLabel.classList.add('has-file');
+            }
+        });
+
+        // Drag and drop
+        fileLabel.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            fileLabel.style.opacity = '0.7';
+        });
+
+        fileLabel.addEventListener('dragleave', () => {
+            fileLabel.style.opacity = '1';
+        });
+
+        fileLabel.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            fileLabel.style.opacity = '1';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].name.endsWith('.csv')) {
+                csvFile.files = files;
+                fileLabel.textContent = files[0].name;
+                fileLabel.classList.add('has-file');
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validation
+            if (!csvFile.files.length) {
+                showMessage('Incomplete Submission', 'error');
+                return;
+            }
+
+            if (!passwordInput.value) {
+                showMessage('Incomplete Submission', 'error');
+                return;
+            }
+
+            if (passwordInput.value !== CORRECT_PASSWORD) {
+                showMessage('Wrong Password', 'error');
+                return;
+            }
+
+            if (!tokenInput.value.trim()) {
+                showMessage('GitHub token is required. Paste your token in the field above.', 'error');
+                return;
+            }
+
+            // Upload to GitHub
+            await uploadToGitHub();
+        });
+
+        async function uploadToGitHub() {
+            const file = csvFile.files[0];
+            const fileContent = await file.text();
+            const base64Content = btoa(fileContent);
+            const fileName = file.name;
+            const githubPath = `${GITHUB_PATH}/${fileName}`;
+
+            loading.style.display = 'block';
+            message.style.display = 'none';
+
+            try {
+                // Get current file SHA (if it exists)
+                const shaResponse = await fetch(
+                    `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${githubPath}`,
+                    {
+                        headers: {
+                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    }
+                );
+
+                let sha = null;
+                if (shaResponse.ok) {
+                    const data = await shaResponse.json();
+                    sha = data.sha;
+                }
+
+                // Upload file
+                const uploadResponse = await fetch(
+                    `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${githubPath}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            message: `Update ${fileName} - ${new Date().toLocaleString()}`,
+                            content: base64Content,
+                            branch: GITHUB_BRANCH,
+                            ...(sha && { sha })
+                        })
+                    }
+                );
+
+                loading.style.display = 'none';
+
+                if (uploadResponse.ok) {
+                    showMessage(`✓ File uploaded successfully to GitHub!`, 'success');
+                    form.reset();
+                    fileLabel.textContent = 'Choose CSV file or drag and drop';
+                    fileLabel.classList.remove('has-file');
+                } else {
+                    const error = await uploadResponse.json();
+                    showMessage(`Error: ${error.message || 'Upload failed'}`, 'error');
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                showMessage(`Error: ${err.message}`, 'error');
+            }
+        }
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
