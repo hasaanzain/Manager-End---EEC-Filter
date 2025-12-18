@@ -221,13 +221,6 @@
                 <input type="password" id="password" placeholder="Enter password" />
             </div>
 
-            <div class="form-group hidden">
-                <label for="token">GitHub Token (required for upload)</label>
-                <input type="text" id="token" placeholder="Paste your GitHub personal access token" />
-                <small style="color: #999; display: block; margin-top: 5px;">
-                    <a href="https://github.com/settings/tokens" target="_blank" style="color: #CC333D;">Generate token here</a> with 'repo' scope. You can delete it after upload.
-                </small>
-            </div>
 
             <div class="button-group">
                 <button type="submit" class="primary-btn">Submit</button>
@@ -310,10 +303,6 @@
                 return;
             }
 
-            if (!tokenInput.value.trim()) {
-                showMessage('GitHub token is required. Paste your token in the field above.', 'error');
-                return;
-            }
 
             // Upload to GitHub
             await uploadToGitHub();
